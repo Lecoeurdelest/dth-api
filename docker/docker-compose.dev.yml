@@ -1,0 +1,25 @@
+# Development override for docker-compose.yml
+# This enables hot-reload with bind mounts
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    volumes:
+      # Full bind mount for development
+      - ../:/app:rw
+      # Exclude build directories
+      - /app/build
+      - /app/.gradle
+    environment:
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+    # Override command for development with Gradle
+    command: >
+      sh -c "
+        echo 'Waiting for MariaDB...' &&
+        sleep 10 &&
+        gradle bootRun
+      "
+

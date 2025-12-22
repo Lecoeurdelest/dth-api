@@ -7,7 +7,6 @@ import com.example.app.loyalty.dto.PointsTransactionDto;
 import com.example.app.loyalty.mapper.LoyaltyMapper;
 import com.example.app.loyalty.repository.LoyaltyPointsRepository;
 import com.example.app.loyalty.repository.PointsTransactionRepository;
-import com.example.app.shared.exception.ResourceNotFoundException;
 import com.example.app.shared.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

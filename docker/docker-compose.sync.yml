@@ -1,0 +1,16 @@
+# Docker Compose override for docker-sync
+# Use this with: docker-compose -f docker-compose.yml -f docker-compose.sync.yml up
+
+services:
+  app:
+    volumes:
+      # Use docker-sync volume instead of direct bind mount
+      - dth-api-sync:/app:nocopy
+      # Exclude build directories
+      - /app/build
+      - /app/.gradle
+
+volumes:
+  dth-api-sync:
+    external: true
+

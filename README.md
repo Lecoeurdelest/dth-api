@@ -24,12 +24,11 @@ This project follows a **Modular Monolith** pattern, which provides:
 
 ```
 src/main/java/com/example/app
-├── shared/              # Shared infrastructure
+├── shared/              # Shared infrastructure (Shared Kernel)
 │   ├── config/         # Global configuration
 │   ├── security/       # JWT, Spring Security
 │   ├── exception/      # Global exception handling
 │   ├── response/       # API response wrapper
-│   ├── mapper/         # Shared mappers (if any)
 │   └── util/           # Utility classes
 │
 ├── auth/               # Authentication module
@@ -44,6 +43,10 @@ src/main/java/com/example/app
 │
 └── Application.java    # Main application class
 ```
+
+**📖 For detailed module organization guidelines, see [MODULE_ORGANIZATION.md](./MODULE_ORGANIZATION.md)**
+
+**📖 For project file organization, see [PROJECT_ORGANIZATION.md](./PROJECT_ORGANIZATION.md)**
 
 ## 📦 Module Structure (Mandatory)
 
@@ -72,6 +75,71 @@ Each module follows this exact structure:
 - Call other modules via their application services
 - Keep entities and repositories private to the module
 
+## 🚀 Quick Start with Docker (Recommended)
+
+The easiest way to get started is using Docker:
+
+```bash
+# One-click start (builds and runs everything)
+./scripts/start.sh
+
+# Or using Make
+make start
+```
+
+This will:
+- ✅ Start MariaDB database
+- ✅ Build and start the Spring Boot application
+- ✅ Run Flyway migrations automatically
+- ✅ Make services available at http://localhost:8080
+
+**Access:**
+- API: http://localhost:8080
+- Swagger UI: http://localhost:8080/swagger-ui.html
+- Database: localhost:3306 (user: `root`, password: `root`)
+
+For detailed Docker setup, see [DOCKER_SETUP.md](./DOCKER_SETUP.md) or [DOCKER_QUICK_START.md](./DOCKER_QUICK_START.md)
+
+## 📋 Available Commands
+
+### Using Make
+
+```bash
+make help          # Show all available commands
+make build         # Build Docker images
+make up            # Start containers
+make down          # Stop containers
+make logs          # Show logs
+make restart       # Restart containers
+make clean         # Clean everything
+make dev           # Development mode
+make db-logs       # MariaDB logs only
+make app-logs      # Application logs only
+make shell         # Open shell in app container
+make db-shell      # Open MariaDB shell
+make rebuild       # Rebuild and restart
+```
+
+### Using Scripts
+
+```bash
+./scripts/start.sh      # One-click start
+./scripts/start-dev.sh   # Development mode with hot-reload
+```
+
+### Using Docker Compose Directly
+
+```bash
+# Start services
+docker-compose -f docker/docker-compose.yml up -d
+
+# View logs
+docker-compose -f docker/docker-compose.yml logs -f
+
+# Stop services
+docker-compose -f docker/docker-compose.yml down
+```
+
 ## 🔐 Module Responsibilities
 
 ### Auth Module (`/auth/**`)
@@ -81,35 +149,11 @@ Each module follows this exact structure:
 - Social login placeholders (Google, Facebook)
 - **Public endpoints**
 
-### Home Module (`/home/**`)
-- Homepage aggregated data
-- Hero banners
-- Testimonials
-- Service categories preview
-- **Public endpoints**
-
 ### Services Module (`/services/**`)
 - Service listing (paginated)
 - Service detail
 - Service categories
 - **Public endpoints**
-
-### News Module (`/news/**`)
-- News listing (paginated)
-- News detail
-- Featured articles
-- **Public endpoints**
-
-### Contact Module (`/contact/**`)
-- Contact form submission
-- Chat request placeholder
-- **Public endpoints**
-
-### Profile Module (`/profile/**`)
-- User profile management
-- Update profile
-- Avatar upload (stub)
-- **Protected endpoints** (requires authentication)
 
 ### Orders Module (`/orders/**`)
 - Order history (paginated)
@@ -119,12 +163,10 @@ Each module follows this exact structure:
 - Invoice preview (stub)
 - **Protected endpoints** (requires authentication)
 
-### Tasks Module (`/tasks/**`)
-- Dashboard aggregation
-- Profile summary
-- Orders summary
-- Promotions summary
-- Read-only aggregation
+### Profile Module (`/profile/**`)
+- User profile management
+- Update profile
+- Avatar upload (stub)
 - **Protected endpoints** (requires authentication)
 
 ### Loyalty Module (`/loyalty/**`)
@@ -149,43 +191,18 @@ Each module follows this exact structure:
 
 3. **Flyway Migrations**: All schema changes via Flyway migrations in `src/main/resources/db/migration/`
 
-### Database Schema
-
-See Flyway migration files:
-- `V1__Create_auth_users_table.sql`
-- `V2__Create_home_tables.sql`
-- `V3__Create_services_services_table.sql`
-- `V4__Create_news_articles_table.sql`
-- `V5__Create_contact_messages_table.sql`
-- `V6__Create_profile_profiles_table.sql`
-- `V7__Create_orders_tables.sql`
-- `V8__Create_loyalty_tables.sql`
-
 ## 🔒 Security
 
 ### Authentication
-
 - **JWT-based authentication** with access tokens and refresh tokens
 - Access token expiration: 1 hour (configurable)
 - Refresh token expiration: 24 hours (configurable)
 - Password hashing: BCrypt
 
 ### Security Configuration
-
 - Public endpoints: `/auth/**`, `/home/**`, `/services/**`, `/news/**`, `/contact/**`
 - Protected endpoints: `/profile/**`, `/orders/**`, `/tasks/**`, `/loyalty/**`
 - CORS enabled for all origins (configure for production)
-
-### JWT Configuration
-
-Configure in `application.properties`:
-```properties
-app.jwt.secret=your-secret-key-change-this-in-production
-app.jwt.access-token-expiration-ms=3600000
-app.jwt.refresh-token-expiration-ms=86400000
-```
-
-**⚠️ Important**: Change the JWT secret in production to a strong secret (minimum 256 bits).
 
 ## 🛠️ Technology Stack
 
@@ -203,244 +220,17 @@ app.jwt.refresh-token-expiration-ms=86400000
 - **Jakarta Validation**
 - **OpenAPI (Swagger)**
 
-## 📋 API Design
+## 📚 Documentation
 
-### Response Format
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Architecture documentation
+- [MODULE_ORGANIZATION.md](./MODULE_ORGANIZATION.md) - Module organization guide
+- [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) - Project structure overview
+- [PROJECT_ORGANIZATION.md](./PROJECT_ORGANIZATION.md) - File organization guide
+- [DOCKER_SETUP.md](./DOCKER_SETUP.md) - Docker setup guide
+- [DOCKER_QUICK_START.md](./DOCKER_QUICK_START.md) - Docker quick reference
+- [QUICK_START.md](./QUICK_START.md) - Quick start guide
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Troubleshooting guide
 
-All API responses follow this unified format:
+## 📝 License
 
-```json
-{
-  "success": true,
-  "data": {},
-  "error": null,
-  "message": "Optional message"
-}
-```
-
-### Error Response
-
-```json
-{
-  "success": false,
-  "data": null,
-  "error": "ERROR_CODE",
-  "message": "Error description"
-}
-```
-
-### Pagination
-
-List endpoints support pagination with query parameters:
-- `page` (default: 0)
-- `size` (default: 10)
-- `sortBy` (default: "id")
-- `sortDir` (default: "asc")
-
-Response includes pagination metadata:
-```json
-{
-  "success": true,
-  "data": {
-    "content": [],
-    "page": 0,
-    "size": 10,
-    "totalElements": 100,
-    "totalPages": 10,
-    "last": false,
-    "first": true
-  }
-}
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Java 17+
-- Gradle 8.5+
-- MariaDB 10.5+
-- IDE (IntelliJ IDEA recommended)
-
-### Setup
-
-1. **Clone the repository**
-
-2. **Configure Database**
-
-   Update `src/main/resources/application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:mariadb://localhost:3306/app_db
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-   ```
-
-3. **Create Database**
-   ```sql
-   CREATE DATABASE app_db;
-   ```
-
-4. **Run Application**
-   ```bash
-   ./gradlew bootRun
-   ```
-
-   Or using Gradle wrapper:
-   ```bash
-   gradlew bootRun
-   ```
-
-5. **Access Swagger UI**
-   - Open: http://localhost:8080/swagger-ui.html
-   - API Docs: http://localhost:8080/v3/api-docs
-
-### Build
-
-```bash
-./gradlew build
-```
-
-### Run Tests
-
-```bash
-./gradlew test
-```
-
-## 📝 Adding a New Module
-
-To add a new module, follow these steps:
-
-1. **Create Module Structure**
-   ```
-   {newmodule}/
-   ├── api/
-   ├── application/
-   ├── domain/
-   ├── repository/
-   ├── dto/
-   ├── mapper/
-   └── config/
-   ```
-
-2. **Create Domain Entity**
-   - Place in `domain/` package
-   - Use `@Entity` and `@Table(name = "{module}_{tablename}")`
-   - No foreign keys to other modules
-
-3. **Create Repository**
-   - Extend `JpaRepository<Entity, Long>`
-   - Keep it in `repository/` package
-
-4. **Create DTOs**
-   - Request DTOs for API input
-   - Response DTOs for API output
-   - Place in `dto/` package
-
-5. **Create Application Service**
-   - Business logic goes here
-   - Public API for the module
-   - Place in `application/` package
-
-6. **Create REST Controller**
-   - Public endpoints
-   - Use `@RestController` and `@RequestMapping("/{module}")`
-   - Place in `api/` package
-
-7. **Create MapStruct Mapper**
-   - Map between entities and DTOs
-   - Place in `mapper/` package
-
-8. **Create Flyway Migration**
-   - Create table(s) with module prefix
-   - No foreign keys to other modules
-   - Place in `src/main/resources/db/migration/`
-
-9. **Update Security Config**
-   - Add endpoint paths to `SecurityConfig.java`
-   - Specify public vs protected
-
-10. **Add Module Config**
-    - Create `{module}/config/{Module}Config.java`
-    - Add any module-specific configuration
-
-## 🔄 Module Communication Example
-
-**Example: Orders module needs user info from Auth module**
-
-❌ **Wrong Approach:**
-```java
-// In OrderService
-@Autowired
-private UserRepository userRepository; // ❌ DON'T DO THIS
-```
-
-✅ **Correct Approach:**
-```java
-// In OrderService
-@Autowired
-private AuthApplicationService authService; // ✅ Use application service
-
-// Auth module exposes:
-public interface AuthApplicationService {
-    UserDto getUserById(Long userId);
-}
-```
-
-## 🧪 Testing
-
-### Unit Tests
-
-Create tests in `src/test/java/com/example/app/{module}/`
-
-### Integration Tests
-
-Use `@SpringBootTest` for integration testing.
-
-## 📚 API Documentation
-
-- **Swagger UI**: http://localhost:8080/swagger-ui.html
-- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
-
-All endpoints are documented with OpenAPI annotations.
-
-## 🎯 Best Practices
-
-1. **Keep modules independent**: No direct dependencies between modules
-2. **Use DTOs**: Always use DTOs for API boundaries
-3. **Validate input**: Use Jakarta Validation on request DTOs
-4. **Handle exceptions**: Use global exception handler
-5. **Log appropriately**: Use appropriate log levels
-6. **Transaction management**: Use `@Transactional` on service methods
-7. **Pagination**: Always paginate list endpoints
-8. **Security**: Never expose entities directly, always use DTOs
-
-## 🚧 Limitations & Future Enhancements
-
-### Current Limitations
-
-- Tasks module aggregation is a placeholder (needs integration with other modules)
-- Social login (Google, Facebook) is placeholder
-- Avatar upload is stub
-- Invoice preview is stub
-
-### Future Enhancements
-
-- Event-driven communication between modules (optional)
-- Caching layer (Redis)
-- Message queue for async operations
-- Metrics and monitoring
-- Full integration tests
-
-## 📄 License
-
-[Your License Here]
-
-## 👥 Contributors
-
-[Your Team Here]
-
----
-
-**Built with ❤️ using Modular Monolith architecture**
-
-
+[Add your license here]

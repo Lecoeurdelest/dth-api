@@ -1,43 +1,147 @@
-HELP.md
-.gradle
+# ============================================
+# Gradle Build Files
+# ============================================
 build/
+.gradle/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+!gradle/wrapper/gradle-wrapper.properties
+gradle-app.setting
+.gradletasknamecache
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# ============================================
+# Compiled Files
+# ============================================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# ============================================
+# IDE Files
+# ============================================
+## IntelliJ IDEA
+.idea/
 *.iml
 *.ipr
+*.iws
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+.idea_modules/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+## Eclipse
+.project
+.classpath
+.settings/
+bin/
+.loadpath
+.factorypath
 
-### VS Code ###
+## VS Code
 .vscode/
+*.code-workspace
 
-### Application ###
-application-local.properties
+## NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ============================================
+# OS Files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ============================================
+# Docker
+# ============================================
+.docker-sync/
+docker-compose.override.yml
+.env
+.env.local
+
+# ============================================
+# Logs
+# ============================================
 *.log
+logs/
+*.log.*
 
+# ============================================
+# Temporary Files
+# ============================================
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+*.bak
+*.backup
 
+# ============================================
+# Application Properties (Secrets)
+# ============================================
+application-local.properties
+application-prod.properties
+application-secret.properties
+*.secret
+*.key
+*.pem
+
+# ============================================
+# Test Coverage
+# ============================================
+.nyc_output/
+coverage/
+*.lcov
+.jacoco/
+
+# ============================================
+# Package Files
+# ============================================
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# ============================================
+# Environment Files
+# ============================================
+.env
+.env.local
+.env.*.local
+!config/.env.example
+
+# ============================================
+# Spring Boot
+# ============================================
+spring-boot-*.log
+application-*.log
+
+# ============================================
+# MapStruct Generated Files (if not in build/)
+# ============================================
+**/generated/
+
+# ============================================
+# Flyway
+# ============================================
+flyway.conf
+
+# ============================================
+# Node (if using frontend tools)
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,24 @@
+# Development Dockerfile with Gradle for hot-reload
+FROM gradle:8.5-jdk17
+
+WORKDIR /app
+
+# Install additional tools
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Gradle files
+COPY gradle ./gradle
+COPY build.gradle.kts settings.gradle.kts gradle.properties ./
+
+# Pre-download dependencies (using system gradle)
+RUN gradle dependencies --no-daemon || true
+
+# Expose port
+EXPOSE 8080
+
+# Default command - will be overridden by docker-compose
+CMD ["./gradlew", "bootRun"]
+

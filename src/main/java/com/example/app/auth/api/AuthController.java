@@ -41,6 +41,13 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(response, "Token refreshed successfully"));
     }
 
+    @PostMapping("/logout")
+    @Operation(summary = "Logout user")
+    public ResponseEntity<ApiResponse<Void>> logout(@Valid @RequestBody RefreshTokenRequest request) {
+        authService.logout(request.getRefreshToken());
+        return ResponseEntity.ok(ApiResponse.success(null, "Logout successful"));
+    }
+
     @PostMapping("/google")
     @Operation(summary = "Login with Google (placeholder)")
     public ResponseEntity<ApiResponse<AuthResponse>> loginWithGoogle(@RequestBody String googleId) {

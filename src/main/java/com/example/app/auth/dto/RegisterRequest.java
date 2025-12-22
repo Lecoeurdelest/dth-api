@@ -2,6 +2,7 @@ package com.example.app.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -19,7 +20,12 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    @NotBlank(message = "Password confirmation is required")
+    private String confirmPassword;
+
+    @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number must be 10-15 digits")
     private String phone;
+    
     private String firstName;
     private String lastName;
 }

@@ -1,45 +1,55 @@
 package com.example.app.services.application;
 
 import com.example.app.services.dto.ServiceDto;
-import com.example.app.services.mapper.ServiceMapper;
-import com.example.app.services.repository.ServiceRepository;
-import com.example.app.shared.exception.ResourceNotFoundException;
 import com.example.app.shared.util.PageUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@org.springframework.stereotype.Service
-@RequiredArgsConstructor
-public class ServiceApplicationService {
-
-    private final ServiceRepository serviceRepository;
-    private final ServiceMapper serviceMapper;
-
-    @Transactional(readOnly = true)
-    public PageUtil.PageResponse<ServiceDto> getAllServices(int page, int size, String sortBy, String sortDir) {
-        Pageable pageable = PageUtil.createPageable(page, size, sortBy, sortDir);
-        Page<com.example.app.services.domain.Service> services = serviceRepository.findByActiveTrue(pageable);
-        return PageUtil.toPageResponse(services.map(s -> serviceMapper.toDto(s)));
-    }
-
-    @Transactional(readOnly = true)
-    public ServiceDto getServiceById(Long id) {
-        return serviceRepository.findByIdAndActiveTrue(id)
-                .map(serviceMapper::toDto)
-                .orElseThrow(() -> new ResourceNotFoundException("Service not found with id: " + id));
-    }
-
-    @Transactional(readOnly = true)
-    public List<ServiceDto> getServicesByCategory(String category) {
-        return serviceRepository.findByCategory(category).stream()
-                .map(serviceMapper::toDto)
-                .collect(Collectors.toList());
-    }
+/**
+ * Public Application Service Interface for Services Module
+ * 
+ * <p>This interface defines the public API for the Services module.
+ * Other modules should use this interface to interact with Services module functionality.
+ * 
+ * <p><b>Module Boundary:</b> This is the public contract for cross-module communication.
+ * Implementations should be in the same package but are not exposed.
+ */
+public interface ServiceApplicationService {
+    
+    /**
+     * Get service by ID
+     * 
+     * @param id the service ID
+     * @return ServiceDto containing service information
+     * @throws com.example.app.shared.exception.ResourceNotFoundException if service not found
+     */
+    ServiceDto getServiceById(Long id);
+    
+    /**
+     * Get all services with pagination
+     * 
+     * @param page page number (0-indexed)
+     * @param size page size
+     * @param sortBy sort field
+     * @param sortDir sort direction (ASC/DESC)
+     * @return paginated response with services
+     */
+    PageUtil.PageResponse<ServiceDto> getAllServices(int page, int size, String sortBy, String sortDir);
+    
+    /**
+     * Get services by category
+     * 
+     * @param category the category name
+     * @return list of services in the category
+     */
+    List<ServiceDto> getServicesByCategory(String category);
+    
+    /**
+     * Update service rating (called by Reviews module)
+     * 
+     * @param serviceId the service ID
+     * @param newRating the new average rating
+     * @param reviewCount the total review count
+     */
+    void updateServiceRating(Long serviceId, Double newRating, Long reviewCount);
 }
-

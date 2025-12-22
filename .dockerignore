@@ -1,0 +1,52 @@
+# Build outputs
+build/
+.gradle/
+*.jar
+*.war
+*.ear
+!gradle/wrapper/*.jar
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker (keep docker files, exclude sync data)
+.docker-sync/
+
+# Documentation (exclude from build context)
+*.md
+docs/
+!README.md
+
+# Logs
+*.log
+logs/
+
+# Test files
+src/test/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Scripts (not needed in Docker image)
+scripts/
+
+# Config templates
+config/
+
