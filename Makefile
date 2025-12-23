@@ -1,4 +1,4 @@
-.PHONY: help build up down logs restart clean dev
+.PHONY: help build up down logs restart clean dev dev-watcher
 
 help: ## Show this help message
 	@echo "DTH API Docker Commands:"
@@ -34,42 +34,17 @@ dev: ## Start in development mode (local app + Docker DB only, no Docker build)
 	@docker-compose -f docker/docker-compose.yml up -d mariadb
 	@echo "⏳ Waiting for MariaDB to be ready..."
 	@sleep 5
-	@echo "🚀 Starting Spring Boot application locally..."
-	@echo "   Profile: dev"
+	@echo "🚀 Starting development mode with auto-compile watcher..."
+	@echo "   Profile: dev (with DevTools hot reload enabled)"
 	@echo "   Database: localhost:3306"
-	@echo "   Note: Running locally, no Docker build needed!"
+	@echo "   Hot reload: Save file -> Auto compile -> DevTools auto-restart (~2-5s)"
 	@echo ""
-	@JAVA17_HOME=""; \
-	if [ -f "/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home/bin/java" ]; then \
-		JAVA17_HOME="/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"; \
-	elif [ -f "/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home/bin/java" ]; then \
-		JAVA17_HOME="/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"; \
-	fi; \
-	if [ -n "$$JAVA17_HOME" ]; then \
-		echo "✅ Using Java 17: $$JAVA17_HOME"; \
-		export JAVA_HOME="$$JAVA17_HOME"; \
-		if [ -f "./gradlew" ]; then \
-			SPRING_PROFILES_ACTIVE=dev JAVA_HOME="$$JAVA17_HOME" ./gradlew bootRun; \
-		elif command -v gradle > /dev/null 2>&1; then \
-			echo "⚠️  gradlew not found, using system gradle..."; \
-			SPRING_PROFILES_ACTIVE=dev JAVA_HOME="$$JAVA17_HOME" gradle bootRun; \
-		else \
-			echo "❌ Error: Neither gradlew nor gradle command found!"; \
-			exit 1; \
-		fi; \
-	else \
-		echo "⚠️  Java 17 not found, using current Java (may cause issues with Java 25)"; \
-		echo "   Install Java 17: brew install openjdk@17"; \
-		if [ -f "./gradlew" ]; then \
-			SPRING_PROFILES_ACTIVE=dev ./gradlew bootRun; \
-		elif command -v gradle > /dev/null 2>&1; then \
-			echo "⚠️  gradlew not found, using system gradle..."; \
-			SPRING_PROFILES_ACTIVE=dev gradle bootRun; \
-		else \
-			echo "❌ Error: Neither gradlew nor gradle command found!"; \
-			exit 1; \
-		fi; \
-	fi
+	@bash scripts/dev-with-watcher.sh
+
+dev-watcher: dev ## Alias for 'make dev' (kept for backward compatibility)
+	@echo ""
+	@echo "💡 Note: 'make dev-watcher' is now the same as 'make dev'"
+	@echo "   Auto-compile watcher is built-in to 'make dev'"
 
 start: ## One-click start (build + run)
 	@bash scripts/start.sh

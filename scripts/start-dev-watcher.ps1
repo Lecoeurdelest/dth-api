@@ -1,7 +1,7 @@
 # PowerShell script for Windows - Development mode with Hot Reload + Auto-compile
-# Tối ưu: Chỉ build lại khi cần, sử dụng cache, hot reload, auto-compile watcher
-# Usage: .\scripts\start-dev.ps1
-# Or: powershell -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1
+# Optimized: Auto-compile watcher + Spring Boot with DevTools
+# Usage: .\scripts\start-dev-watcher.ps1
+# Or: powershell -ExecutionPolicy Bypass -File .\scripts\start-dev-watcher.ps1
 
 $ErrorActionPreference = "Stop"
 
@@ -43,18 +43,17 @@ $ComposeCmd = "docker-compose $($ComposeFiles -join ' ')"
 # Stop existing containers
 Write-Host ""
 Write-Info "Cleaning up existing containers..."
-Invoke-Expression "$ComposeCmd down" | Out-Null
+Invoke-Expression "$ComposeCmd down" 2>&1 | Out-Null
 Write-Success "Containers cleaned up"
 
 # Build only if needed (incremental build with cache)
 Write-Host ""
 Write-Info "Checking/Building development image..."
-Write-Host "[*] Optimized: Docker will automatically use cache for unchanged layers"
-Write-Host "[*] Only rebuilds what has changed (much faster!)"
+Write-Host "[*] Optimized: Docker will automatically use cache for unchanged layers" -ForegroundColor Gray
+Write-Host "[*] Only rebuilds what has changed (much faster!)" -ForegroundColor Gray
 Write-Host ""
 
-# Build với cache - Docker tự động detect thay đổi và chỉ build lại layer cần thiết
-# Sử dụng --pull=never để tránh pull lại base image nếu đã có
+# Build with cache
 Write-Info "Running: $ComposeCmd build app"
 Invoke-Expression "$ComposeCmd build app"
 
@@ -148,7 +147,7 @@ $null = Register-EngineEvent PowerShell.Exiting -Action {
 }
 
 try {
-    # Start app in foreground để xem logs
+    # Start app in foreground to see logs
     Invoke-Expression "$ComposeCmd up app"
 } finally {
     # Cleanup on exit

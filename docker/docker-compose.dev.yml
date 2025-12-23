@@ -21,6 +21,8 @@ services:
       - gradle_wrapper:/root/.gradle/wrapper
       - gradle_daemon:/root/.gradle/daemon
     environment:
+      # CRITICAL: Use dev profile to enable DevTools
+      SPRING_PROFILES_ACTIVE: "dev"
       # Spring Boot DevTools - fast hot reload
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
@@ -34,16 +36,19 @@ services:
       SPRING_JPA_SHOW_SQL: "false"
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "false"
     # Override command for development with optimized startup
+    # Using --continuous flag ensures Gradle recompiles on source changes
+    # DevTools will detect class file changes and restart Spring Boot
     command: >
       sh -c "
         echo '[*] Waiting for MariaDB...' &&
         wait-for-it mariadb:3306 --timeout=60 --strict --quiet &&
         echo '[OK] MariaDB is ready!' &&
-        echo '[*] Starting Spring Boot with hot reload...' &&
+        echo '[*] Starting Spring Boot with hot reload (profile: dev)...' &&
         echo '[!] First run: downloading dependencies (~30s-2min, cached after)' &&
-        echo '[!] Hot reload: code changes will auto-restart app in ~2-5s' &&
+        echo '[!] Hot reload: Save source files -> Gradle recompiles -> DevTools restarts app (~2-5s)' &&
+        echo '[!] Watching for changes in src/ directory...' &&
         cd /app &&
-        gradle bootRun --continuous --parallel --warning-mode=none
+        SPRING_PROFILES_ACTIVE=dev gradle bootRun --continuous --parallel --warning-mode=none
       "
 
 volumes:
