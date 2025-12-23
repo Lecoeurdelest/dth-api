@@ -40,9 +40,6 @@ public class AuthService implements AuthApplicationService {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BadRequestException("Username already exists");
         }
-        if (request.getPhone() != null && userRepository.existsByPhone(request.getPhone())) {
-            throw new BadRequestException("Phone number already exists");
-        }
 
         // Use mapper to create user entity
         User user = userMapper.toEntity(request);
@@ -71,25 +68,9 @@ public class AuthService implements AuthApplicationService {
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
-        User user;
-        
-        // Find user based on loginType
-        switch (request.getLoginType()) {
-            case EMAIL:
-                user = userRepository.findByEmail(request.getUsername())
-                        .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
-                break;
-            case USERNAME:
-                user = userRepository.findByUsername(request.getUsername())
-                        .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
-                break;
-            case PHONE:
-                user = userRepository.findByPhone(request.getUsername())
-                        .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
-                break;
-            default:
-                throw new BadRequestException("Invalid login type");
-        }
+        // Only support username + password login
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException("Invalid credentials");

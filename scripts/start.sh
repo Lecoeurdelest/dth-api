@@ -29,29 +29,17 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
-# Check if docker-sync is installed (optional)
-if false; then # Đã sửa để tắt docker-sync
-    echo "✅ Docker-sync found"
-    USE_DOCKER_SYNC=true
-else
-    echo "ℹ️  Docker-sync not found. Using standard volumes (slower on Mac/Windows)"
-    USE_DOCKER_SYNC=false
+# Use standard Docker Compose files (include override for development)
+COMPOSE_FILES="-f docker/docker-compose.yml"
+# Check if override file exists, use it if available
+if [ -f "docker/docker-compose.override.yml" ]; then
+    COMPOSE_FILES="$COMPOSE_FILES -f docker/docker-compose.override.yml"
 fi
 
 # Stop and remove existing containers
 echo ""
 echo "🧹 Cleaning up existing containers..."
-docker-compose -f docker/docker-compose.yml down -v 2>/dev/null || true
-
-# Start docker-sync if available
-if [ "$USE_DOCKER_SYNC" = true ]; then
-    echo ""
-    echo "🔄 Starting docker-sync..."
-    docker-sync start || true
-    COMPOSE_FILES="-f docker/docker-compose.yml -f docker/docker-compose.sync.yml"
-else
-    COMPOSE_FILES="-f docker/docker-compose.yml"
-fi
+docker-compose $COMPOSE_FILES down -v 2>/dev/null || true
 
 # Build and start containers
 echo ""

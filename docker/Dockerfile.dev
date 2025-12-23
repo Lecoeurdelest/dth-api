@@ -2,6 +2,9 @@
 # Development Dockerfile with Gradle for hot-reload
 FROM gradle:8.5-jdk17
 
+# Install netcat for DB waiting
+RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Install additional tools including wait-for-it
@@ -31,4 +34,3 @@ EXPOSE 8080
 # Use system gradle (from base image) since gradlew may not be available after volume mount
 # Note: In dev mode, volumes will mount source code, so files from COPY above may be overridden
 CMD ["gradle", "bootRun", "--continuous"]
-

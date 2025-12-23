@@ -51,6 +51,16 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    @PostMapping
+    @Operation(summary = "Create a new order/booking")
+    public ResponseEntity<ApiResponse<OrderDto>> createOrder(
+            Authentication authentication,
+            @Valid @RequestBody com.example.app.orders.dto.CreateOrderRequest request) {
+        Long userId = Long.parseLong(authentication.getName());
+        OrderDto response = orderService.createOrder(userId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "Order created"));
+    }
+
     @GetMapping("/status/{status}")
     @Operation(summary = "Get orders by status")
     public ResponseEntity<ApiResponse<List<OrderDto>>> getOrdersByStatus(
