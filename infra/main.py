@@ -6,6 +6,7 @@ Simplified version with deployment support
 
 import os
 import sys
+import base64
 from pathlib import Path
 from typing import Optional
 
@@ -165,7 +166,12 @@ async def main():
             if os.getenv("SAVE_JAR", "false").lower() == "true":
                 output_path = os.getenv("JAR_OUTPUT_PATH", "build/output/app.jar")
                 os.makedirs(os.path.dirname(output_path), exist_ok=True)
+                # Read file contents as bytes (binary file)
                 jar_content = await jar_file.contents()
+                # Convert to bytes if it's a string (some SDK versions return base64 string)
+                if isinstance(jar_content, str):
+                    jar_content = base64.b64decode(jar_content)
+                
                 with open(output_path, "wb") as f:
                     f.write(jar_content)
                 print(f"📁 Saved to: {output_path}")
