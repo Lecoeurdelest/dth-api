@@ -28,30 +28,14 @@ if ! docker info > /dev/null 2>&1; then
     echo "❌ Docker is not running. Please start Docker Desktop first."
     exit 1
 fi
-
-# Check if docker-sync is installed (optional)
-if command -v docker-sync &> /dev/null; then
-    echo "✅ Docker-sync found"
-    USE_DOCKER_SYNC=true
-else
-    echo "ℹ️  Docker-sync not found. Using standard volumes (slower on Mac/Windows)"
-    USE_DOCKER_SYNC=false
-fi
+ 
+# Use standard Docker Compose files (include override for development)
+COMPOSE_FILES="-f docker/docker-compose.yml -f docker/docker-compose.override.yml"
 
 # Stop and remove existing containers
 echo ""
 echo "🧹 Cleaning up existing containers..."
-docker-compose -f docker/docker-compose.yml down -v 2>/dev/null || true
-
-# Start docker-sync if available
-if [ "$USE_DOCKER_SYNC" = true ]; then
-    echo ""
-    echo "🔄 Starting docker-sync..."
-    docker-sync start || true
-    COMPOSE_FILES="-f docker/docker-compose.yml -f docker/docker-compose.sync.yml"
-else
-    COMPOSE_FILES="-f docker/docker-compose.yml"
-fi
+docker-compose $COMPOSE_FILES down -v 2>/dev/null || true
 
 # Build and start containers
 echo ""

@@ -22,9 +22,6 @@ public class RegisterRequest {
 
     @NotBlank(message = "Password confirmation is required")
     private String confirmPassword;
-
-    @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number must be 10-15 digits")
-    private String phone;
     
     private String firstName;
     private String lastName;

@@ -24,8 +24,6 @@ dth-api/
 │   ├── Dockerfile.dev
 │   ├── docker-compose.yml
 │   ├── docker-compose.dev.yml
-│   ├── docker-compose.sync.yml
-│   └── docker-sync.yml
 │
 ├── scripts/                 ✅ Utility scripts
 │   ├── start.sh

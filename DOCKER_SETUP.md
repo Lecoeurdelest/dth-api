@@ -55,31 +55,7 @@ This mode:
 - Automatically rebuilds on file changes
 - Faster iteration cycle
 
-## Docker Sync Setup (Optional - Recommended for Mac/Windows)
-
-Docker Sync improves file system performance on Mac and Windows.
-
-### Install Docker Sync
-
-```bash
-gem install docker-sync
-```
-
-### Start with Docker Sync
-
-```bash
-# Start docker-sync
-docker-sync start
-
-# In another terminal, start docker-compose
-docker-compose -f docker-compose.yml -f docker-compose.sync.yml up
-```
-
-Or use the start script which auto-detects docker-sync:
-
-```bash
-./start.sh
-```
+<!-- docker-sync removed — project now uses Docker Compose overrides for development. See `docker/docker-compose.override.yml` and `docker/Dockerfile.dev`. -->
 
 ## Available Commands
 
@@ -204,22 +180,7 @@ If port 8080 or 3306 is already in use:
    docker-compose up -d
    ```
 
-### Docker Sync Issues
-
-1. Stop docker-sync:
-   ```bash
-   docker-sync stop
-   ```
-
-2. Clean sync volumes:
-   ```bash
-   docker-sync clean
-   ```
-
-3. Restart:
-   ```bash
-   docker-sync start
-   ```
+<!-- docker-sync removed; no docker-sync troubleshooting -->
 
 ### Clean Everything
 

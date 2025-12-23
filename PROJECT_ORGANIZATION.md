@@ -28,8 +28,6 @@ dth-api/
 │   ├── Dockerfile.dev             # Development Docker image
 │   ├── docker-compose.yml         # Main compose file
 │   ├── docker-compose.dev.yml     # Development overrides
-│   ├── docker-compose.sync.yml    # Docker sync configuration
-│   └── docker-sync.yml            # Docker sync settings
 │
 ├── scripts/                       # Utility scripts
 │   ├── start.sh                   # One-click start script

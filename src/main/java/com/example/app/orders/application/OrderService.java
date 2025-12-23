@@ -78,6 +78,20 @@ public class OrderService {
         return orderMapper.toReviewDto(review);
     }
 
+    @Transactional
+    public OrderDto createOrder(Long userId, com.example.app.orders.dto.CreateOrderRequest request) {
+        Order order = Order.builder()
+                .userId(userId)
+                .serviceId(request.getServiceId())
+                .status(Order.OrderStatus.PENDING)
+                .totalAmount(java.math.BigDecimal.ZERO)
+                .notes(request.getNotes())
+                .build();
+
+        order = orderRepository.save(order);
+        return orderMapper.toDto(order);
+    }
+
     @Transactional(readOnly = true)
     public List<OrderReviewDto> getServiceReviews(Long serviceId) {
         return orderReviewRepository.findByServiceId(serviceId).stream()
