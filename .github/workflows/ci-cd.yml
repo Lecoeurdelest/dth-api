@@ -16,11 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Setup Dagger
-        uses: dagger/dagger-for-github@v5
-        with:
-          version: 0.9.4
-      
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -28,7 +23,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install dagger-io==0.9.4
+          pip install dagger-io==0.9.4 python-dotenv
       
       - name: Build with Dagger
         env:
@@ -57,11 +52,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Setup Dagger
-        uses: dagger/dagger-for-github@v5
-        with:
-          version: 0.9.4
-      
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -69,7 +59,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install dagger-io==0.9.4
+          pip install dagger-io==0.9.4 python-dotenv
       
       - name: Deploy to EC2
         env:
@@ -82,4 +72,3 @@ jobs:
         run: |
           cd infra
           python main.py deploy
-
