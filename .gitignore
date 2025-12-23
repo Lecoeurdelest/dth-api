@@ -128,6 +128,12 @@ coverage/
 *.rar
 
 # ============================================
+# Temporary/Generated Files
+# ============================================
+srcbe.txt
+tree.txt
+
+# ============================================
 # Environment Files (Secrets) - BẮT BUỘC IGNORE
 # ============================================
 # Ignore .env files (chứa secrets)
