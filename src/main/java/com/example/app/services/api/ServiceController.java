@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/services")
 @RequiredArgsConstructor
-@Tag(name = "Services", description = "Service management APIs")
+@Tag(name = "Services", description = "Service management API")
 public class ServiceController {
 
     private final ServiceApplicationService serviceApplicationService;
