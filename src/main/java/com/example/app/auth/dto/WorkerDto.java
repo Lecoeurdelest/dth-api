@@ -1,4 +1,4 @@
-package com.example.app.home.dto;
+package com.example.app.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,18 +9,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestimonialDto {
+public class WorkerDto {
     private Long id;
-    private String customerName;
-    private String content;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String phone;
     private String avatarUrl;
-    private Integer rating;
+    private String skills; // JSON/text
 }
-
-
-
-
-
 
 
 

@@ -61,6 +61,12 @@ public class User {
     @Column(length = 500)
     private String avatarUrl;
 
+    @Column(length = 50)
+    private String role;
+
+    @Column(columnDefinition = "TEXT")
+    private String skills;
+
     // Social login fields (placeholders)
     @Column(length = 100)
     private String googleId;
