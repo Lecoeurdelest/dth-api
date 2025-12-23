@@ -41,6 +41,10 @@ public class Service {
     @Column(length = 50)
     private String category;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String details;
+
     @Column(nullable = false)
     @Builder.Default
     private Boolean active = true;

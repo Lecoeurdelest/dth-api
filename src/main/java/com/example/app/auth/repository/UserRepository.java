@@ -16,7 +16,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByPhone(String phone);
     Optional<User> findByGoogleId(String googleId);
     Optional<User> findByFacebookId(String facebookId);
+
+    // Find workers by role and skills containing a keyword (simple text match)
+    java.util.List<User> findByRoleAndSkillsContaining(String role, String skillFragment);
 }
+
 
 
 
