@@ -102,6 +102,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
 
+    // Spring Boot DevTools (hot reload - only in development)
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     implementation("mysql:mysql-connector-java:8.0.33")
 }

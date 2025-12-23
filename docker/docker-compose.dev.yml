@@ -1,5 +1,6 @@
 # Development override for docker-compose.yml
 # This enables hot-reload with bind mounts
+# Optimized for fast build, run, and hot reload
 
 services:
   app:
@@ -11,32 +12,38 @@ services:
     volumes:
       # Full bind mount for development
       - ../:/app:rw
-      # Exclude build directories to avoid sync overhead
+      # Exclude build directories to avoid sync overhead (especially Windows)
       - /app/build
       - /app/.gradle
       # Mount Gradle cache from host for faster builds
-      # This persists Gradle cache between container restarts
+      # This persists Gradle cache between container restarts (CRITICAL for speed!)
       - gradle_cache:/root/.gradle/caches
       - gradle_wrapper:/root/.gradle/wrapper
+      - gradle_daemon:/root/.gradle/daemon
     environment:
+      # Spring Boot DevTools - fast hot reload
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
-      # Enable Gradle daemon and optimizations for faster builds (especially Windows)
-      GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dorg.gradle.workers.max=4 -Dfile.encoding=UTF-8 -Dorg.gradle.console=plain"
-      # Reduce Gradle log verbosity for faster startup
-      GRADLE_LOG_LEVEL: "warn"
-      # Windows optimization: Reduce JVM overhead (smaller heap = faster GC = faster startup)
+      SPRING_DEVTOOLS_RESTART_POLL_INTERVAL: "1s"
+      SPRING_DEVTOOLS_RESTART_QUIET_PERIOD: "400ms"
+      # Enable Gradle daemon and all optimizations for maximum speed
+      GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dorg.gradle.workers.max=4 -Dfile.encoding=UTF-8"
+      # JVM optimizations for faster startup and hot reload
       JAVA_OPTS: "-Xmx1024m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
-    # Override command for development with smart DB waiting
-    # Optimized: Simplified checks, faster startup (especially for Windows)
+      # Spring Boot optimizations for development
+      SPRING_JPA_SHOW_SQL: "false"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "false"
+    # Override command for development with optimized startup
     command: >
       sh -c "
         echo '[*] Waiting for MariaDB...' &&
         wait-for-it mariadb:3306 --timeout=60 --strict --quiet &&
         echo '[OK] MariaDB is ready!' &&
-        echo '[*] Starting Spring Boot...' &&
+        echo '[*] Starting Spring Boot with hot reload...' &&
+        echo '[!] First run: downloading dependencies (~30s-2min, cached after)' &&
+        echo '[!] Hot reload: code changes will auto-restart app in ~2-5s' &&
         cd /app &&
-        gradle bootRun --continuous --parallel --quiet --warning-mode=none
+        gradle bootRun --continuous --parallel --warning-mode=none
       "
 
 volumes:
@@ -44,4 +51,5 @@ volumes:
     driver: local
   gradle_wrapper:
     driver: local
-
+  gradle_daemon:
+    driver: local

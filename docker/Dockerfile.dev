@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 # Development Dockerfile with Gradle for hot-reload
-# Optimized for fast builds on Windows/Mac/Linux
+# Optimized for fast builds, runs, and hot reload on Windows/Mac/Linux
 FROM gradle:8.5-jdk17
 
 # Install all tools in one layer to reduce build time
@@ -24,19 +24,14 @@ COPY build.gradle.kts settings.gradle.kts gradle.properties ./
 RUN mkdir -p /root/.gradle && \
     chmod 755 /root/.gradle
 
-# OPTIMIZED: Skip pre-downloading dependencies during build
-# Dependencies will be downloaded on first run and cached in volume (gradle_cache)
-# This reduces build time from ~114s to ~2s for subsequent builds
-# First run will download deps (~30-60s on Mac, ~2-4min on Windows) but they'll be cached for next runs
-# 
-# Alternative: If you want to pre-download (uncomment below):
-# RUN --mount=type=cache,target=/root/.gradle/caches \
-#     --mount=type=cache,target=/root/.gradle/wrapper \
-#     gradle dependencies --no-daemon --quiet || true
+# OPTIMIZED STRATEGY: Skip pre-download in Dockerfile (fast build)
+# Dependencies will be downloaded on first run and cached in Docker volume
+# This makes build fast (~2s on Mac, ~5s on Windows) and first run downloads deps (~30s-2min)
+# Subsequent runs are very fast because dependencies are cached in volume
+# Trade-off: First container run slower, but all subsequent runs (and rebuilds) are fast
 
 # Expose port
 EXPOSE 8080
 
 # Default command - will be overridden by docker-compose
-# Gradle will download dependencies on first run and cache them in volume
 CMD ["gradle", "bootRun", "--continuous", "--parallel"]
