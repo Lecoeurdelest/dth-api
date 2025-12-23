@@ -26,6 +26,9 @@ Thumbs.db
 
 # Docker (keep docker files, exclude sync data)
 .docker-sync/
+docker/docker-compose*.yml
+docker/Dockerfile*
+docker-sync.yml
 
 # Documentation (exclude from build context)
 *.md
@@ -36,7 +39,7 @@ docs/
 *.log
 logs/
 
-# Test files
+# Test files (exclude from production build)
 src/test/
 
 # Temporary files
@@ -49,4 +52,10 @@ scripts/
 
 # Config templates
 config/
+
+# Node modules (if any)
+node_modules/
+
+# Gradle wrapper cache (will be downloaded in container)
+.gradle-wrapper/
 

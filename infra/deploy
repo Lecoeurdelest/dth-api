@@ -1,0 +1,20 @@
+#!/bin/bash
+# Cross-platform wrapper script for Unix (Mac/Linux)
+# Usage: ./deploy [build|deploy]
+# On Windows, use: deploy.bat [build|deploy]
+
+set -e
+
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Change to script directory
+cd "$SCRIPT_DIR"
+
+# Make deploy.py executable if needed
+chmod +x deploy.py 2>/dev/null || true
+
+# Run deploy.py (Python script handles all setup)
+# Try python3 first, fallback to python
+python3 deploy.py "$@" 2>/dev/null || python deploy.py "$@"
+

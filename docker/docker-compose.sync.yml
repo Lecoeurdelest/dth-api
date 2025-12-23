@@ -1,16 +1,26 @@
 # Docker Compose override for docker-sync
-# Use this with: docker-compose -f docker-compose.yml -f docker-compose.sync.yml up
+# Use this with: docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.sync.yml up
+# IMPORTANT: docker-sync must be started and synced BEFORE starting containers!
+# If files are missing, restart docker-sync: docker-sync stop && docker-sync clean && docker-sync start
 
 services:
   app:
     volumes:
-      # Use docker-sync volume instead of direct bind mount
-      - dth-api-sync:/app:nocopy
-      # Exclude build directories
+      # Use docker-sync volume instead of direct bind mount (much faster on Mac/Windows!)
+      # Note: docker-sync volume should contain all source files from project root
+      - dth-api-sync:/app:rw
+      # Exclude build directories to avoid sync overhead
       - /app/build
       - /app/.gradle
+      # Keep Gradle cache volumes for faster builds
+      - gradle_cache:/root/.gradle/caches
+      - gradle_wrapper:/root/.gradle/wrapper
 
 volumes:
   dth-api-sync:
     external: true
+  gradle_cache:
+    driver: local
+  gradle_wrapper:
+    driver: local
 

@@ -6,7 +6,7 @@ You are an Expert Technical Project Manager and Software Architect. Your objecti
 
 -   **Framework:** Spring Boot 3.x (Java 17+).
 -   **Architecture:** Modular Monolith (Package by Feature).
--   **Database:** PostgreSQL with **Flyway** migrations.
+-   **Database:** MariaDB with **Flyway** migrations.
 -   **ORM:** Spring Data JPA.
 -   **Boilerplate Reduction:** **Lombok** (`@Data`, `@Builder`, `@RequiredArgsConstructor`, `@Slf4j`).
 -   **Validation:** Jakarta Validation (`@NotNull`, `@Size`, etc.).

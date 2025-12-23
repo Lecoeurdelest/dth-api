@@ -1,0 +1,229 @@
+@startuml DTH_Project_ERD
+!define TABLE(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define PRIMARY_KEY(x) <b>x</b>
+!define FOREIGN_KEY(x) <u>x</u>
+!define NOT_NULL <color:red>NOT NULL</color>
+
+skinparam linetype ortho
+skinparam roundcorner 10
+skinparam shadowing false
+skinparam class {
+    BackgroundColor<<T>> #E1F5FF
+    BorderColor #337AB7
+    ArrowColor #337AB7
+}
+
+title DTH Project - Entity Relationship Diagram (ERD)
+
+' ========================================
+' AUTH MODULE
+' ========================================
+
+entity "auth_users" as User {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    email : VARCHAR(100) <<UNIQUE>> NOT_NULL
+    username : VARCHAR(50) <<UNIQUE>> NOT_NULL
+    phone : VARCHAR(20)
+    password : VARCHAR NOT_NULL
+    enabled : BOOLEAN NOT_NULL <<default:true>>
+    accountNonExpired : BOOLEAN NOT_NULL <<default:true>>
+    accountNonLocked : BOOLEAN NOT_NULL <<default:true>>
+    credentialsNonExpired : BOOLEAN NOT_NULL <<default:true>>
+    firstName : VARCHAR(50)
+    lastName : VARCHAR(50)
+    avatarUrl : VARCHAR(500)
+    googleId : VARCHAR(100)
+    facebookId : VARCHAR(100)
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+entity "auth_refresh_tokens" as RefreshToken {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    FOREIGN_KEY(userId) : BIGINT <<FK>> NOT_NULL
+    token : VARCHAR(500) <<UNIQUE>> NOT_NULL
+    expiresAt : TIMESTAMP NOT_NULL
+    createdAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' PROFILE MODULE
+' ========================================
+
+entity "profile_profiles" as UserProfile {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    FOREIGN_KEY(userId) : BIGINT <<FK>> <<UNIQUE>> NOT_NULL
+    firstName : VARCHAR(50)
+    lastName : VARCHAR(50)
+    avatarUrl : VARCHAR(500)
+    bio : VARCHAR(500)
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' SERVICES MODULE
+' ========================================
+
+entity "services_services" as Service {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    name : VARCHAR(200) NOT_NULL
+    description : VARCHAR(1000)
+    basePrice : DECIMAL(10,2) NOT_NULL
+    imageUrl : VARCHAR(500)
+    category : VARCHAR(50)
+    active : BOOLEAN NOT_NULL <<default:true>>
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' ORDERS MODULE
+' ========================================
+
+entity "orders_orders" as Order {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    FOREIGN_KEY(userId) : BIGINT <<FK>> NOT_NULL
+    FOREIGN_KEY(serviceId) : BIGINT <<FK>> NOT_NULL
+    status : VARCHAR(50) NOT_NULL <<enum:PENDING,CONFIRMED,IN_PROGRESS,COMPLETED,CANCELLED>>
+    totalAmount : DECIMAL(10,2) NOT_NULL
+    notes : VARCHAR(500)
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+entity "orders_reviews" as OrderReview {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    FOREIGN_KEY(orderId) : BIGINT <<FK>> NOT_NULL
+    FOREIGN_KEY(userId) : BIGINT <<FK>> NOT_NULL
+    rating : INTEGER NOT_NULL
+    comment : VARCHAR(1000)
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' LOYALTY MODULE
+' ========================================
+
+entity "loyalty_points" as LoyaltyPoints {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    FOREIGN_KEY(userId) : BIGINT <<FK>> <<UNIQUE>> NOT_NULL
+    pointsBalance : INTEGER NOT_NULL <<default:0>>
+    currentTier : VARCHAR(50) NOT_NULL <<enum:BRONZE,SILVER,GOLD,PLATINUM>>
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+entity "loyalty_points_transactions" as PointsTransaction {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    FOREIGN_KEY(userId) : BIGINT <<FK>> NOT_NULL
+    points : INTEGER NOT_NULL
+    type : VARCHAR(50) NOT_NULL <<enum:EARNED,REDEEMED,EXPIRED,ADJUSTED>>
+    description : VARCHAR(200)
+    referenceId : BIGINT NOT_NULL
+    createdAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' NEWS MODULE
+' ========================================
+
+entity "news_articles" as News {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    title : VARCHAR(200) NOT_NULL
+    summary : VARCHAR(1000)
+    content : TEXT
+    imageUrl : VARCHAR(500)
+    featured : BOOLEAN NOT_NULL <<default:false>>
+    published : BOOLEAN NOT_NULL <<default:true>>
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' HOME MODULE
+' ========================================
+
+entity "home_data" as HomeData {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    heroTitle : VARCHAR(200)
+    heroDescription : VARCHAR(500)
+    heroImageUrl : VARCHAR(500)
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+entity "home_testimonials" as Testimonial {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    customerName : VARCHAR(200)
+    content : VARCHAR(500)
+    avatarUrl : VARCHAR(500)
+    rating : INTEGER NOT_NULL <<default:5>>
+    featured : BOOLEAN NOT_NULL <<default:false>>
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' CONTACT MODULE
+' ========================================
+
+entity "contact_messages" as ContactMessage {
+    PRIMARY_KEY(id) : BIGINT <<PK>>
+    --
+    name : VARCHAR(100)
+    email : VARCHAR(100)
+    phone : VARCHAR(20)
+    subject : VARCHAR(500)
+    message : TEXT
+    read : BOOLEAN NOT_NULL <<default:false>>
+    createdAt : TIMESTAMP NOT_NULL
+    updatedAt : TIMESTAMP NOT_NULL
+}
+
+' ========================================
+' RELATIONSHIPS (Logical - No Foreign Keys in DB)
+' ========================================
+
+User ||--o{ RefreshToken : "has"
+User ||--o| UserProfile : "has"
+User ||--o{ Order : "places"
+User ||--o| LoyaltyPoints : "has"
+User ||--o{ PointsTransaction : "has"
+User ||--o{ OrderReview : "writes"
+
+Service ||--o{ Order : "used_in"
+Order ||--o| OrderReview : "has"
+
+' Note: Relationships shown as logical references
+' (Modular Monolith pattern - no FK constraints)
+
+note right of User
+  Central entity for authentication
+  All other modules reference via userId (Long)
+end note
+
+note right of Order
+  References User and Service via IDs
+  No foreign key constraints (modular architecture)
+end note
+
+note right of LoyaltyPoints
+  One-to-one with User
+  Tracks loyalty points and tier
+end note
+
+@enduml
+

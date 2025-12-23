@@ -25,7 +25,7 @@ services:
   app:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.dev
     container_name: dth-api
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -38,12 +38,12 @@ services:
       - "8080:8080"
     # Note: Volumes are commented out for production build
     # Uncomment for development hot-reload
-    # volumes:
-    #   - ../src:/app/src:rw
-    #   - ../build.gradle.kts:/app/build.gradle.kts:ro
-    #   - ../settings.gradle.kts:/app/settings.gradle.kts:ro
-    #   - ../gradle.properties:/app/gradle.properties:ro
-    #   - ../gradle:/app/gradle:ro
+    volumes:
+      - ../src:/app/src:rw
+      - ../build.gradle.kts:/app/build.gradle.kts:ro
+      - ../settings.gradle.kts:/app/settings.gradle.kts:ro
+      - ../gradle.properties:/app/gradle.properties:ro
+      - ../gradle:/app/gradle:ro
     depends_on:
       mariadb:
         condition: service_healthy

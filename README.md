@@ -44,9 +44,7 @@ src/main/java/com/example/app
 └── Application.java    # Main application class
 ```
 
-**📖 For detailed module organization guidelines, see [MODULE_ORGANIZATION.md](./MODULE_ORGANIZATION.md)**
-
-**📖 For project file organization, see [PROJECT_ORGANIZATION.md](./PROJECT_ORGANIZATION.md)**
+**📖 For detailed module organization guidelines, see [docs/MODULE_ORGANIZATION.md](./docs/MODULE_ORGANIZATION.md)**
 
 ## 📦 Module Structure (Mandatory)
 
@@ -98,7 +96,7 @@ This will:
 - Swagger UI: http://localhost:8080/swagger-ui.html
 - Database: localhost:3306 (user: `root`, password: `root`)
 
-For detailed Docker setup, see [DOCKER_SETUP.md](./DOCKER_SETUP.md) or [DOCKER_QUICK_START.md](./DOCKER_QUICK_START.md)
+For detailed setup instructions, see [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)
 
 ## 📋 Available Commands
 
@@ -222,14 +220,23 @@ docker-compose -f docker/docker-compose.yml down
 
 ## 📚 Documentation
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - Architecture documentation
-- [MODULE_ORGANIZATION.md](./MODULE_ORGANIZATION.md) - Module organization guide
-- [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) - Project structure overview
-- [PROJECT_ORGANIZATION.md](./PROJECT_ORGANIZATION.md) - File organization guide
-- [DOCKER_SETUP.md](./DOCKER_SETUP.md) - Docker setup guide
-- [DOCKER_QUICK_START.md](./DOCKER_QUICK_START.md) - Docker quick reference
-- [QUICK_START.md](./QUICK_START.md) - Quick start guide
-- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Troubleshooting guide
+Tất cả tài liệu chi tiết được tổ chức trong thư mục [`docs/`](./docs/):
+
+### 📖 Hướng dẫn sử dụng
+- [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md) - Hướng dẫn chạy dự án (Docker & Local)
+- [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) - Hướng dẫn deploy Backend lên EC2 (Amazon Linux)
+
+### 📐 Quy tắc & Tiêu chuẩn
+- [docs/MODULE_ORGANIZATION.md](./docs/MODULE_ORGANIZATION.md) - Quy tắc tổ chức modules
+- [docs/CODING_STANDARDS.md](./docs/CODING_STANDARDS.md) - Tiêu chuẩn coding & implementation
+- [docs/TECHNICAL_DESIGN_GUIDE.md](./docs/TECHNICAL_DESIGN_GUIDE.md) - Hướng dẫn technical design
+
+### ✅ Checklist & Tasks
+- [docs/MILESTONE.md](./docs/MILESTONE.md) - Checklist các tính năng chính
+- [docs/IMPLEMENTATION_TASKS.md](./docs/IMPLEMENTATION_TASKS.md) - Danh sách tasks chi tiết
+
+### 🗄️ Database
+- [docs/ERD.puml](./docs/ERD.puml) - ERD diagram (PlantUML)
 
 ## 📝 License
 

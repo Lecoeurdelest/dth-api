@@ -30,7 +30,7 @@ if ! docker info > /dev/null 2>&1; then
 fi
 
 # Check if docker-sync is installed (optional)
-if command -v docker-sync &> /dev/null; then
+if false; then # Đã sửa để tắt docker-sync
     echo "✅ Docker-sync found"
     USE_DOCKER_SYNC=true
 else

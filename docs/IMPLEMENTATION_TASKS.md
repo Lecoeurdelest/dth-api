@@ -2,7 +2,7 @@
 
 **Based on:** Frontend Requirements (`FRON_END.md`)  
 **Architecture:** Modular Monolith (Spring Boot 3, Java 17+)  
-**Database:** PostgreSQL with Flyway Migrations  
+**Database:** MariaDB with Flyway Migrations  
 **Conventions:** Lombok, MapStruct, Jakarta Validation, JPA
 
 ---

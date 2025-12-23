@@ -1,0 +1,54 @@
+# ============================================
+# Environment variables (Nhạy cảm - KHÔNG COMMIT)
+# ============================================
+# Ignore .env files (chứa secrets)
+.env
+.env.local
+.env.*.local
+
+# Giữ lại .env.example (template, KHÔNG chứa secrets - ĐƯỢC COMMIT)
+!.env.example
+
+# ============================================
+# SSH Keys & Certificates (Nhạy cảm - KHÔNG COMMIT)
+# ============================================
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+id_rsa
+id_ed25519
+id_rsa.pub
+id_ed25519.pub
+known_hosts
+
+# ============================================
+# Python cache
+# ============================================
+*.pyc
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*$py.class
+.Python
+
+# ============================================
+# Dagger cache
+# ============================================
+.dagger/
+
+# ============================================
+# Logs
+# ============================================
+*.log
+*.log.*
+
+# ============================================
+# Build outputs
+# ============================================
+build/output/
+dist/
+*.egg-info/
+.eggs/

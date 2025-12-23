@@ -95,8 +95,21 @@ application-local.properties
 application-prod.properties
 application-secret.properties
 *.secret
-*.key
+
+# ============================================
+# SSH Keys & Certificates (Secrets) - BẮT BUỘC IGNORE
+# ============================================
 *.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+id_rsa
+id_ed25519
+id_rsa.pub
+id_ed25519.pub
+known_hosts
 
 # ============================================
 # Test Coverage
@@ -115,12 +128,17 @@ coverage/
 *.rar
 
 # ============================================
-# Environment Files
+# Environment Files (Secrets) - BẮT BUỘC IGNORE
 # ============================================
+# Ignore .env files (chứa secrets)
 .env
 .env.local
 .env.*.local
-!config/.env.example
+
+# Giữ lại .env.example (template, KHÔNG chứa secrets - ĐƯỢC COMMIT)
+!.env.example
+!infra/.env.example
+!**/.env.example
 
 # ============================================
 # Spring Boot

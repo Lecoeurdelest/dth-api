@@ -1,20 +1,27 @@
+# syntax=docker/dockerfile:1.4
 # Multi-stage build for Spring Boot application
 FROM gradle:8.5-jdk17 AS build
 
 WORKDIR /app
 
-# Copy Gradle files
+# Copy Gradle files first for better caching
 COPY build.gradle.kts settings.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 
-# Download dependencies (cached layer)
-RUN gradle dependencies --no-daemon || true
+# Use BuildKit cache mount for Gradle dependencies (much faster!)
+# This persists Gradle cache between builds
+RUN --mount=type=cache,target=/root/.gradle/caches \
+    --mount=type=cache,target=/root/.gradle/wrapper \
+    gradle dependencies --no-daemon || true
 
 # Copy source code
 COPY src ./src
 
-# Build the application
-RUN gradle clean build --no-daemon -x test
+# Build without clean (incremental build) - much faster!
+# Use cache mounts for Gradle cache
+RUN --mount=type=cache,target=/root/.gradle/caches \
+    --mount=type=cache,target=/root/.gradle/wrapper \
+    gradle build --no-daemon -x test --parallel
 
 # Verify JAR was created
 RUN ls -la /app/build/libs/ || (echo "ERROR: No JAR files found!" && exit 1)
