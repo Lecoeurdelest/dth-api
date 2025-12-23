@@ -152,9 +152,8 @@ async def deploy_jar(
 
 async def main():
     """Main pipeline"""
-    config = dagger.Config(log_output=sys.stderr)
-    
-    async with dagger.Connection(config) as client:
+    # Initialize Dagger connection
+    async with dagger.Connection() as client:
         action = sys.argv[1] if len(sys.argv) > 1 else "build"
         
         if action == "build":

@@ -23,7 +23,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install dagger-io==0.9.4 python-dotenv
+          pip install -r infra/requirements.txt
       
       - name: Build with Dagger
         env:
@@ -59,7 +59,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install dagger-io==0.9.4 python-dotenv
+          pip install -r infra/requirements.txt
       
       - name: Deploy to EC2
         env:
