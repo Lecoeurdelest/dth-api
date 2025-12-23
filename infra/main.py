@@ -39,9 +39,10 @@ async def build(client: dagger.Client) -> dagger.File:
     build_profile = os.getenv("BUILD_PROFILE", "prod")
     skip_tests = os.getenv("SKIP_TESTS", "true").lower() == "true"
     
-    # Get source code
+    # Get source code - use relative path from infra/ directory (parent = project root)
+    # Since script runs from infra/, ".." points to project root
     source = client.host().directory(
-        ".",
+        "..",
         exclude=[".git", "build", ".gradle", ".idea", "*.iml", "node_modules", "infra"]
     )
     

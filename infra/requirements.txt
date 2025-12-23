@@ -1,2 +1,2 @@
-dagger-io==0.11.3
+dagger-io>=0.12.0
 python-dotenv>=1.0.0
