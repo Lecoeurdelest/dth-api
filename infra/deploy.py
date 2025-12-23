@@ -89,7 +89,7 @@ def install_python_dependencies():
             )
             if result.returncode == 0:
                 print_success("Python dependencies installed successfully")
-                return True
+            return True
             else:
                 print_error(f"Failed to install dependencies")
                 print_info(f"Error: {result.stderr}")
@@ -200,9 +200,9 @@ def load_ssh_key():
             ssh_key_content = pdth_pem.read_text(encoding='utf-8')
             # Validate it looks like a key
             if "BEGIN" in ssh_key_content and "PRIVATE KEY" in ssh_key_content:
-                os.environ["SSH_PRIVATE_KEY"] = ssh_key_content
-                print_success("Auto-loaded SSH key from pdth.pem")
-                return True
+            os.environ["SSH_PRIVATE_KEY"] = ssh_key_content
+            print_success("Auto-loaded SSH key from pdth.pem")
+            return True
             else:
                 print_error("pdth.pem does not appear to be a valid SSH private key")
                 return False

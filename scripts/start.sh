@@ -28,7 +28,7 @@ if ! docker info > /dev/null 2>&1; then
     echo "❌ Docker is not running. Please start Docker Desktop first."
     exit 1
 fi
-
+ 
 # Use standard Docker Compose files (include override for development)
 COMPOSE_FILES="-f docker/docker-compose.yml"
 # Check if override file exists, use it if available
