@@ -21,7 +21,6 @@ java {
     }
 }
 
-// Explicitly configure source sets to ensure Gradle finds source code
 sourceSets {
     main {
         java {

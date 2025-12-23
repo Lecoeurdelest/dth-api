@@ -5,11 +5,11 @@
 
 $ErrorActionPreference = "Stop"
 
-# Colors
-function Write-Success { Write-Host "✅ $args" -ForegroundColor Green }
-function Write-Info { Write-Host "ℹ️  $args" -ForegroundColor Cyan }
-function Write-Warning { Write-Host "⚠️  $args" -ForegroundColor Yellow }
-function Write-Error { Write-Host "❌ $args" -ForegroundColor Red }
+# Colors - Using ASCII-safe characters for Windows PowerShell compatibility
+function Write-Success { Write-Host "[OK] $args" -ForegroundColor Green }
+function Write-Info { Write-Host "[*] $args" -ForegroundColor Cyan }
+function Write-Warning { Write-Host "[!] $args" -ForegroundColor Yellow }
+function Write-Error-Message { Write-Host "[ERROR] $args" -ForegroundColor Red }
 
 # Get script directory
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -19,7 +19,7 @@ $ProjectRoot = Split-Path -Parent $ScriptDir
 Set-Location $ProjectRoot
 
 Write-Host ""
-Write-Host "🚀 Starting DTH API in Development Mode (Hot Reload)..." -ForegroundColor Cyan
+Write-Host "[*] Starting DTH API in Development Mode (Hot Reload)..." -ForegroundColor Cyan
 Write-Host ""
 
 # Enable Docker BuildKit for faster builds
@@ -32,7 +32,7 @@ try {
     docker info | Out-Null
     Write-Success "Docker is running"
 } catch {
-    Write-Error "Docker is not running. Please start Docker Desktop first."
+    Write-Error-Message "Docker is not running. Please start Docker Desktop first."
     exit 1
 }
 
@@ -49,8 +49,8 @@ Write-Success "Containers cleaned up"
 # Build only if needed (incremental build with cache)
 Write-Host ""
 Write-Info "Checking/Building development image..."
-Write-Host "💡 Tối ưu: Docker sẽ tự động sử dụng cache cho các layer không thay đổi"
-Write-Host "💡 Chỉ build lại những gì đã thay đổi (nhanh hơn nhiều!)"
+Write-Host "[*] Optimized: Docker will automatically use cache for unchanged layers"
+Write-Host "[*] Only rebuilds what has changed (much faster!)"
 Write-Host ""
 
 # Build với cache - Docker tự động detect thay đổi và chỉ build lại layer cần thiết
@@ -59,12 +59,12 @@ Write-Info "Running: $ComposeCmd build app"
 Invoke-Expression "$ComposeCmd build app"
 
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "Build failed!"
+    Write-Error-Message "Build failed!"
     Write-Info "Try: $ComposeCmd build --no-cache app (clean build)"
     exit 1
 }
 
-Write-Success "Build completed ✅ (Docker used cache for unchanged layers)"
+Write-Success "Build completed (Docker used cache for unchanged layers)"
 
 # Start MariaDB first
 Write-Host ""
@@ -99,7 +99,7 @@ if ($Ready) {
     Write-Success "MariaDB is ready!"
 } else {
     Write-Host ""
-    Write-Error "MariaDB failed to start within $MaxWait seconds"
+    Write-Error-Message "MariaDB failed to start within $MaxWait seconds"
     Write-Info "Check logs with: $ComposeCmd logs mariadb"
     exit 1
 }
@@ -107,15 +107,16 @@ if ($Ready) {
 # Start application in development mode with hot reload
 Write-Host ""
 Write-Success "Starting application in development mode..."
-Write-Host "💡 Code changes will be automatically reloaded (hot reload enabled)!" -ForegroundColor Yellow
-Write-Host "💡 Edit files in src/ directory and they will reload automatically" -ForegroundColor Yellow
+Write-Host "[*] Code changes will be automatically reloaded (hot reload enabled)!" -ForegroundColor Yellow
+Write-Host "[*] Edit files in src/ directory and they will reload automatically" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "📋 Service URLs:" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Service URLs:" -ForegroundColor Cyan
 Write-Host "   - API: http://localhost:8080"
 Write-Host "   - Swagger UI: http://localhost:8080/swagger-ui.html"
 Write-Host "   - MariaDB: localhost:3306"
 Write-Host ""
-Write-Host "📝 Useful commands:" -ForegroundColor Cyan
+Write-Host "Useful commands:" -ForegroundColor Cyan
 Write-Host "   - View logs: $ComposeCmd logs -f app"
 Write-Host "   - Stop: $ComposeCmd down"
 Write-Host "   - Restart app only: $ComposeCmd restart app"

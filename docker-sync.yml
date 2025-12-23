@@ -7,5 +7,3 @@ syncs:
     sync_excludes: ['.git', '.idea', 'build', '.gradle', '*.iml', '*.log', 'node_modules', '.docker-sync']
     watch_excludes: ['build', '.gradle', '*.log']
     sync_strategy: 'unison'
-    # Note: Unison does not support sync_userid/sync_groupid, removed to avoid errors
-
