@@ -20,10 +20,14 @@ WORKDIR /app
 COPY gradle ./gradle
 COPY build.gradle.kts settings.gradle.kts gradle.properties ./
 
+# Pre-create Gradle user home directory to avoid permission issues on Windows
+RUN mkdir -p /root/.gradle && \
+    chmod 755 /root/.gradle
+
 # OPTIMIZED: Skip pre-downloading dependencies during build
 # Dependencies will be downloaded on first run and cached in volume (gradle_cache)
 # This reduces build time from ~114s to ~2s for subsequent builds
-# First run will download deps (~30-60s) but they'll be cached for next runs
+# First run will download deps (~30-60s on Mac, ~2-4min on Windows) but they'll be cached for next runs
 # 
 # Alternative: If you want to pre-download (uncomment below):
 # RUN --mount=type=cache,target=/root/.gradle/caches \

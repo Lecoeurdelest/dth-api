@@ -21,20 +21,22 @@ services:
     environment:
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
-      # Enable Gradle daemon and optimizations for faster builds
-      GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true"
+      # Enable Gradle daemon and optimizations for faster builds (especially Windows)
+      GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dorg.gradle.workers.max=4 -Dfile.encoding=UTF-8 -Dorg.gradle.console=plain"
       # Reduce Gradle log verbosity for faster startup
       GRADLE_LOG_LEVEL: "warn"
+      # Windows optimization: Reduce JVM overhead (smaller heap = faster GC = faster startup)
+      JAVA_OPTS: "-Xmx1024m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
     # Override command for development with smart DB waiting
-    # Optimized: Simplified checks, faster startup
+    # Optimized: Simplified checks, faster startup (especially for Windows)
     command: >
       sh -c "
         echo '[*] Waiting for MariaDB...' &&
-        wait-for-it mariadb:3306 --timeout=60 --strict -- &&
+        wait-for-it mariadb:3306 --timeout=60 --strict --quiet &&
         echo '[OK] MariaDB is ready!' &&
-        echo '[*] Starting Spring Boot (dependencies cached in volume)...' &&
+        echo '[*] Starting Spring Boot...' &&
         cd /app &&
-        gradle bootRun --continuous --parallel
+        gradle bootRun --continuous --parallel --quiet --warning-mode=none
       "
 
 volumes:
