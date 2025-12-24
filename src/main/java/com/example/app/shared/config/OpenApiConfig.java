@@ -25,6 +25,9 @@ public class OpenApiConfig {
                         .description("API documentation for DTH application"))
                 .servers(List.of(
                         new Server()
+                                .url("https://suachuanho.com.vn")
+                                .description("Production server"),
+                        new Server()
                                 .url("http://localhost:8080")
                                 .description("Local server")
                 ))

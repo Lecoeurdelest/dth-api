@@ -83,8 +83,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Allow only local frontend origin; update if frontend runs elsewhere
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8081",  "http://localhost:8080"));
+        // Allow local and production origins
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000", 
+                "http://localhost:8081", 
+                "http://localhost:8080",
+                "https://suachuanho.com.vn",
+                "https://www.suachuanho.com.vn",
+                "http://suachuanho.com.vn",
+                "http://www.suachuanho.com.vn"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization"));
