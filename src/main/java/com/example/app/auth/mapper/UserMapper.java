@@ -19,8 +19,11 @@ public interface UserMapper {
     @Mapping(target = "facebookId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "skills", ignore = true)
     User toEntity(RegisterRequest request);
     
+    @Mapping(target = "role", expression = "java(user.getRole().name())")
     UserDto toDto(User user);
 }
 

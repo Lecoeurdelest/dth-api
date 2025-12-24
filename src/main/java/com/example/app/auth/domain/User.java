@@ -61,8 +61,10 @@ public class User {
     @Column(length = 500)
     private String avatarUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 50)
-    private String role;
+    @Builder.Default
+    private Role role = Role.USER;
 
     @Column(columnDefinition = "TEXT")
     private String skills;

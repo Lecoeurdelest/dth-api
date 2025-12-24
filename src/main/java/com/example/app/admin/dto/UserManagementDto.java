@@ -1,4 +1,4 @@
-package com.example.app.auth.dto;
+package com.example.app.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,16 +11,17 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserManagementDto {
     private Long id;
-    private String email;
     private String username;
+    private String email;
     private String phone;
     private String firstName;
     private String lastName;
     private String avatarUrl;
     private String role;
+    private Boolean enabled;
+    private Boolean accountNonLocked;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
-
-

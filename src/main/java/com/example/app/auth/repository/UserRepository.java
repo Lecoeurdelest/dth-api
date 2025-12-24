@@ -1,5 +1,6 @@
 package com.example.app.auth.repository;
 
+import com.example.app.auth.domain.Role;
 import com.example.app.auth.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Find workers by role and skills containing a keyword (simple text match)
     java.util.List<User> findByRoleAndSkillsContaining(String role, String skillFragment);
+    
+    // Count users by role
+    Long countByRole(Role role);
 }
 
 

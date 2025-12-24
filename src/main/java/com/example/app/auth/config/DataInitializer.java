@@ -1,5 +1,6 @@
 package com.example.app.auth.config;
 
+import com.example.app.auth.domain.Role;
 import com.example.app.auth.domain.User;
 import com.example.app.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class DataInitializer implements CommandLineRunner {
                 .lastName("Thợ Điện")
                 .phone("0900000001")
                 .password(passwordEncoder.encode("A123456a"))
-                .role("WORKER")
+                .role(Role.WORKER)
                 .skills("[\"Sửa điện tại nhà\",\"SỬA CHỮA ĐIỆN\"]")
                 .build();
 
@@ -41,7 +42,7 @@ public class DataInitializer implements CommandLineRunner {
                 .lastName("Thợ Nước")
                 .phone("0900000002")
                 .password(passwordEncoder.encode("A123456a"))
-                .role("WORKER")
+                .role(Role.WORKER)
                 .skills("[\"Sửa nước tại nhà\",\"SỬA CHỮA NƯỚC\"]")
                 .build();
 
@@ -52,7 +53,7 @@ public class DataInitializer implements CommandLineRunner {
                 .lastName("Thợ Mộc")
                 .phone("0900000003")
                 .password(passwordEncoder.encode("A123456a"))
-                .role("WORKER")
+                .role(Role.WORKER)
                 .skills("[\"Sửa chữa đồ mộc\",\"SỬA CHỮA ĐỒ MỘC\"]")
                 .build();
 

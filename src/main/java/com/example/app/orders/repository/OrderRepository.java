@@ -12,6 +12,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByUserId(Long userId, Pageable pageable);
     List<Order> findByUserIdAndStatus(Long userId, Order.OrderStatus status);
+    long countByStatus(Order.OrderStatus status);
 }
 
 
