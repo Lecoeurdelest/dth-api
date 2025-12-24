@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/loyalty")
+@RequestMapping("/api/loyalty")
 @RequiredArgsConstructor
 @Tag(name = "Loyalty", description = "Loyalty points APIs")
 @SecurityRequirement(name = "bearerAuth")

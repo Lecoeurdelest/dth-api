@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/news")
+@RequestMapping("/api/news")
 @RequiredArgsConstructor
 @Tag(name = "News", description = "News APIs")
 public class NewsController {

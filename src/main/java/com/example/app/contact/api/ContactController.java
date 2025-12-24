@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/contact")
+@RequestMapping("/api/contact")
 @RequiredArgsConstructor
 @Tag(name = "Contact", description = "Contact APIs")
 public class ContactController {

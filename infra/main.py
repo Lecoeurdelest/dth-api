@@ -125,11 +125,12 @@ async def deploy_jar(
         "sh", "-c",
         f"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "
         f"{server_user}@{server_ip} "
-        f"'sudo mkdir -p {deploy_path}/build/libs && sudo chown -R {server_user}:{server_user} {deploy_path}'"
+        f"'sudo mkdir -p {deploy_path} && sudo chown -R {server_user}:{server_user} {deploy_path}'"
     ])
     
     # Copy JAR to server
-    remote_jar_path = f"{deploy_path}/build/libs/{jar_filename}"
+    # Note: Copy directly to {deploy_path}/app.jar to match systemd service ExecStart path
+    remote_jar_path = f"{deploy_path}/app.jar"
     deployer = deployer.with_exec([
         "sh", "-c",
         f"scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "
