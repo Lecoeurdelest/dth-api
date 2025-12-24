@@ -63,7 +63,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/workers/**").permitAll()
                         .requestMatchers("/api/news/**").permitAll()
                         .requestMatchers("/api/contact/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/api/swagger-ui/**", "/api/v3/api-docs/**", "/api/swagger-ui.html").permitAll()
                         .requestMatchers("/error").permitAll()
                         // Protected endpoints
                         .requestMatchers("/api/profile/**").authenticated()
