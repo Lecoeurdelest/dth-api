@@ -17,6 +17,9 @@ public class OrderDto {
     private Long id;
     private Long userId;
     private Long serviceId;
+    private Long workerId;
+    private LocalDateTime scheduledAt;
+    private Integer durationMinutes;
     private Order.OrderStatus status;
     private BigDecimal totalAmount;
     private String notes;

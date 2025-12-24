@@ -11,6 +11,7 @@ import com.example.app.orders.repository.OrderReviewRepository;
 import com.example.app.shared.exception.BadRequestException;
 import com.example.app.shared.exception.ResourceNotFoundException;
 import com.example.app.shared.util.PageUtil;
+import com.example.app.workers.application.WorkerAvailabilityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderReviewRepository orderReviewRepository;
     private final OrderMapper orderMapper;
+    private final WorkerAvailabilityService workerAvailabilityService;
 
     @Transactional(readOnly = true)
     public PageUtil.PageResponse<OrderDto> getUserOrders(Long userId, int page, int size, String sortBy, String sortDir) {
@@ -80,9 +82,25 @@ public class OrderService {
 
     @Transactional
     public OrderDto createOrder(Long userId, com.example.app.orders.dto.CreateOrderRequest request) {
+        // Validate worker availability if worker is specified
+        if (request.getWorkerId() != null) {
+            boolean isAvailable = workerAvailabilityService.isWorkerAvailable(
+                    request.getWorkerId(),
+                    request.getScheduledAt(),
+                    request.getDurationMinutes()
+            );
+
+            if (!isAvailable) {
+                throw new BadRequestException("Thợ này không khả dụng trong khung giờ đã chọn. Vui lòng chọn thợ khác hoặc thời gian khác.");
+            }
+        }
+
         Order order = Order.builder()
                 .userId(userId)
                 .serviceId(request.getServiceId())
+                .workerId(request.getWorkerId())
+                .scheduledAt(request.getScheduledAt())
+                .durationMinutes(request.getDurationMinutes())
                 .status(Order.OrderStatus.PENDING)
                 .totalAmount(java.math.BigDecimal.ZERO)
                 .notes(request.getNotes())

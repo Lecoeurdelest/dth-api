@@ -31,6 +31,15 @@ public class Order {
     @Column(nullable = false)
     private Long serviceId; // Reference to services_services.id (no foreign key)
 
+    @Column(nullable = true)
+    private Long workerId; // Reference to auth_users.id (worker, no foreign key)
+
+    @Column(nullable = true)
+    private LocalDateTime scheduledAt;
+
+    @Column(nullable = true)
+    private Integer durationMinutes;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default

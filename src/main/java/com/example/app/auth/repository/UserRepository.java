@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByFacebookId(String facebookId);
 
     // Find workers by role and skills containing a keyword (simple text match)
-    java.util.List<User> findByRoleAndSkillsContaining(String role, String skillFragment);
+    java.util.List<User> findByRoleAndSkillsContaining(Role role, String skillFragment);
     
     // Count users by role
     Long countByRole(Role role);

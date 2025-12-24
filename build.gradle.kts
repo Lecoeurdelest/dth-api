@@ -57,6 +57,8 @@ tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar
 tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.addAll(listOf("-parameters"))
     options.isIncremental = true
+    // Ensure Lombok annotation processing works
+    options.compilerArgs.add("-Xlint:-processing")
 }
 
 repositories {

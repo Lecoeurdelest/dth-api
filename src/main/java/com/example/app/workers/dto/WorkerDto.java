@@ -1,4 +1,4 @@
-package com.example.app.auth.dto;
+package com.example.app.workers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +17,7 @@ public class WorkerDto {
     private String phone;
     private String avatarUrl;
     private String skills; // JSON/text
+    private Boolean available;
 }
 
 
