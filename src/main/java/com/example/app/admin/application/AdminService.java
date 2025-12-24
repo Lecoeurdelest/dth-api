@@ -95,6 +95,89 @@ public class AdminService {
         return mapToOrderManagementDto(order);
     }
 
+    @Transactional
+    public OrderManagementDto updateOrderStatus(Long id, Order.OrderStatus newStatus) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(newStatus);
+        order = orderRepository.save(order);
+        return mapToOrderManagementDto(order);
+    }
+
+    @Transactional
+    public void deleteOrder(Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new RuntimeException("Order not found");
+        }
+        orderRepository.deleteById(id);
+    }
+
+    @Transactional
+    public OrderManagementDto createOrder(Long userId, Long serviceId, String notes) {
+        // Validate user exists
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Validate service exists
+        com.example.app.services.domain.Service service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new RuntimeException("Service not found"));
+
+        // Create new order
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setServiceId(serviceId);
+        order.setStatus(Order.OrderStatus.PENDING);
+        order.setTotalAmount(service.getBasePrice());
+        order.setNotes(notes);
+        
+        order = orderRepository.save(order);
+        return mapToOrderManagementDto(order);
+    }
+
+    @Transactional
+    public void createService(String name, String description, Double basePrice, String category, Boolean active) {
+        com.example.app.services.domain.Service service = new com.example.app.services.domain.Service();
+        service.setName(name);
+        service.setDescription(description);
+        service.setBasePrice(java.math.BigDecimal.valueOf(basePrice));
+        service.setCategory(category);
+        service.setActive(active != null ? active : true);
+        
+        serviceRepository.save(service);
+    }
+
+    @Transactional
+    public void updateService(Long id, String name, String description, Double basePrice, String category, Boolean active) {
+        com.example.app.services.domain.Service service = serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Service not found"));
+        
+        service.setName(name);
+        service.setDescription(description);
+        service.setBasePrice(java.math.BigDecimal.valueOf(basePrice));
+        service.setCategory(category);
+        if (active != null) {
+            service.setActive(active);
+        }
+        
+        serviceRepository.save(service);
+    }
+
+    @Transactional
+    public void deleteService(Long id) {
+        if (!serviceRepository.existsById(id)) {
+            throw new RuntimeException("Service not found");
+        }
+        serviceRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void toggleServiceActive(Long id) {
+        com.example.app.services.domain.Service service = serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Service not found"));
+        service.setActive(!service.getActive());
+        serviceRepository.save(service);
+    }
+
     private UserManagementDto mapToUserManagementDto(User user) {
         return UserManagementDto.builder()
                 .id(user.getId())

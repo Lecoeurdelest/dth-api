@@ -31,7 +31,7 @@ public class ServiceServiceImpl implements ServiceApplicationService {
     @Transactional(readOnly = true)
     public PageUtil.PageResponse<ServiceDto> getAllServices(int page, int size, String sortBy, String sortDir) {
         Pageable pageable = PageUtil.createPageable(page, size, sortBy, sortDir);
-        Page<com.example.app.services.domain.Service> services = serviceRepository.findByActiveTrue(pageable);
+        Page<com.example.app.services.domain.Service> services = serviceRepository.findAll(pageable);
         return PageUtil.toPageResponse(services.map(s -> serviceMapper.toDto(s)));
     }
 
