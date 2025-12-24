@@ -66,7 +66,7 @@ server {
         proxy_read_timeout 60s;
     }
     
-    # Backend API
+    # Backend API (includes all /api endpoints including Swagger UI at /api/swagger-ui.html)
     location /api {
         proxy_pass http://localhost:8080;
         proxy_http_version 1.1;
@@ -80,6 +80,10 @@ server {
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
         
+        # WebSocket support (if needed)
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        
         # CORS headers (adjust as needed)
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
@@ -88,20 +92,6 @@ server {
         if (\$request_method = 'OPTIONS') {
             return 204;
         }
-    }
-    
-    # Swagger UI
-    location /swagger-ui {
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    }
-    
-    # API Docs
-    location /v3/api-docs {
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host \$host;
     }
     
     # Static files caching
